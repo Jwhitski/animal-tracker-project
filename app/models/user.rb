@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
-    has_secure_password
-    validates :username, uniqueness: true
+    has_many :animals
+    has_secure_password #active record gives us methods.
+    validates :email, uniqueness: true
 end
