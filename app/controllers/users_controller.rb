@@ -1,18 +1,35 @@
 class UsersController < ApplicationController
-  get "/users/new" do
+  get "/users/new" do #sign up form
     erb :"users/new.html"
   end
 
   post "/users/new" do
-    binding.pry
-    user = User.create(email: params["email"], password: params["password"]) #creates a new user after form is submitted
-    if user.email.blank? || !u.password.blank? || User.find_by_email(params["email"])
-    session[:user_id] = user.id
+    user = User.new(username: params["username"], password: params["password"]) #creates a new user after form is submitted
+    if user.username.blank? || user.password.blank? || User.find_by_username(params["username"])
     redirect "/users/new"
     else
       user.save
       session[:user_id] = user.id
       redirect '/animals'
     end
+  end
+
+  get "/users/login" do #login form
+    erb :"users/login"
+  end
+
+  post "/users/login" do
+    user = User.find_by(username: params[:username])
+    if user && user.authenticate(params[:password])
+      session[:user_id] = user.id
+      redirect "/animals"
+    else
+      redirect "/users/login"
+    end
+  end
+
+  get '/users/logout' do
+    session.clear
+    redirect '/'
   end
 end
