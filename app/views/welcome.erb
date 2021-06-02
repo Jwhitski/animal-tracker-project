@@ -1,8 +1,12 @@
 <div class="container">
   <h1>Welcome <%= logged_in? ? current_user.username : "User! - Please log in or sign up!" %></h1>
 
+
     <% if logged_in? %>
+    <p>View your list <a href="/animals">here</a></p>
+
     <button onclick="window.location.href='/users/logout'">Logout</button>
+
     <%else%>
     <button onclick="window.location.href='/users/new'">Sign Up</button>
     <button onclick="window.location.href='/users/login'">Log In</button>

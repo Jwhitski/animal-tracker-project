@@ -1,0 +1,23 @@
+<h2> Welcome <%= current_user.username %>! Here is your menagerie! 
+<br>
+<a href="/animals/new"> Add an animal to your list</a></h2>
+
+
+<% if current_user.animals.empty?%>
+  Your list is empty! Add an animal to your list to get started!
+  <hr>
+  <% else %>
+<% @list.each do |animal| %>
+<% if animal.user == current_user %>
+  <p>Name: <%= animal.name %> | Age: <%= animal.age %> | Type: <%= animal.animal_type %> </p>
+    <p><a href="/animals/<%= animal.id %>/edit">Edit</a></p>
+    <form action="/animals/<%= animal.id %>" method="post">
+      <input type="hidden" name="_method" value="delete">
+      <input type="submit" value="Delete">
+      <br>
+      <hr>
+    </form>
+  <% end %>
+  <% end %>
+  <% end %>
+  <p><a href="/users/logout">Logout</a></p>

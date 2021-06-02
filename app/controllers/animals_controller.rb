@@ -1,37 +1,62 @@
 class AnimalsController < ApplicationController
-
+  
   # GET: /animals
   get "/animals" do
-    erb :"/animals/index.html"
+    if logged_in?
+      @list = Animal.all
+      erb :"/animals"
+    else
+      redirect "/users/login"
+    end
   end
-
+  
+  
   # GET: /animals/new
   get "/animals/new" do
-    erb :"/animals/new.html"
+    erb :"/animals/new"
   end
-
-  # POST: /animals
+  
+  #  create
   post "/animals" do
-    redirect "/animals"
+    @animal = current_user.animals.build(params)
+    if !params[:name].empty? && !params[:animal_type].empty? && !params[:age].empty?
+      @animal.save
+      redirect "/animals"
+    else
+      erb :"/animals/new"
+    end
   end
-
-  # GET: /animals/5
-  get "/animals/:id" do
-    erb :"/animals/show.html"
-  end
-
-  # GET: /animals/5/edit
+  
   get "/animals/:id/edit" do
-    erb :"/animals/edit.html"
+    @animal = Animal.find_by_id(params[:id])
+    if @animal.user == current_user
+      erb :"/animals/edit"
+    else
+      redirect "/animals"
+    end
   end
-
+  
   # PATCH: /animals/5
-  patch "/animals/:id" do
-    redirect "/animals/:id"
+  patch '/animals/:id' do 
+    @animal = Animal.find_by_id(params[:id])
+    if @animal.user == current_user && !params[:name].empty? && !params[:age].empty? && !params[:animal_type].empty?
+      @animal.update(name: params[:name], age: params[:age], animal_type: params[:animal_type])
+    end
+    redirect to "/animals"
   end
-
+  
   # DELETE: /animals/5/delete
-  delete "/animals/:id/delete" do
+  delete "/animals/:id" do
+    @animal = Animal.find_by_id(params[:id])
+    if @animal.user == current_user
+      @animal.delete
+    end
     redirect "/animals"
+  end
+  
+  #show
+  get "/animals/:id" do
+    @animal = Animal.find_by_id(params[:id])
+      erb :"/animals/show"
   end
 end

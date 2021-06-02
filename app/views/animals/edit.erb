@@ -1,0 +1,11 @@
+<h2>  Edit an animal from your list!  </h2>
+
+<form action="/animals/<%= @animal.id %>" method="post">
+  <input type="hidden" name="_method" value="patch">
+  <input type="text" name="name" value="<%= @animal.name %>">
+  <input type="integer" name="age" value="<%= @animal.age %>">
+  <input type="text" name="animal_type" value="<%= @animal.animal_type %>">
+  
+  <input type="submit">
+  
+</form>

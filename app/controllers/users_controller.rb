@@ -18,7 +18,7 @@ class UsersController < ApplicationController
     erb :"users/login"
   end
 
-  post "/users/login" do
+  post "/users/login" do #logs in
     user = User.find_by(username: params[:username])
     if user && user.authenticate(params[:password])
       session[:user_id] = user.id
