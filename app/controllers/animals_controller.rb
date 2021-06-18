@@ -3,7 +3,7 @@ class AnimalsController < ApplicationController
   # GET: /animals
   get "/animals" do
     if logged_in?
-      @list = Animal.all
+      @list = current_user.animals
       erb :"/animals"
     else
       redirect "/users/login"
@@ -42,7 +42,7 @@ class AnimalsController < ApplicationController
     if @animal.user == current_user && !params[:name].empty? && !params[:age].empty? && !params[:animal_type].empty?
       @animal.update(name: params[:name], age: params[:age], animal_type: params[:animal_type])
     end
-    redirect to "/animals"
+    redirect "/animals"
   end
   
   # DELETE: /animals/5/delete
@@ -57,6 +57,10 @@ class AnimalsController < ApplicationController
   #show
   get "/animals/:id" do
     @animal = Animal.find_by_id(params[:id])
+    #if id that doesnt exist in the db - redirect
+    if !@animal
+      redirect "/animals"
+    end
       erb :"/animals/show"
   end
 end
